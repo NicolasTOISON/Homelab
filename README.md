@@ -63,6 +63,7 @@
 - Vérifier que les paramètres appliqués sont bien pris en compte `sudo sysctl --system`
 
 ### INSTALL CRI
+
 Doc containerd : https://github.com/containerd/containerd/blob/main/docs/getting-started.md
 
 #### Installer containerd
@@ -80,6 +81,7 @@ Dépôt des release contaienrd : https://containerd.io/downloads/
 - Activer l'unit systemd de containerd : `sudo systemctl enable --now containerd`
 
 #### Installer runc
+
 Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 
 - Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.11/runc.arm64`
@@ -87,7 +89,7 @@ Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 
 #### Installer le plugin CNI
 
-Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases 
+Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
 
 bin_dir = "/opt/cni/bin"
 
@@ -97,6 +99,7 @@ conf_dir = "/etc/cni/net.d"
 - Créer le répertoire /cni/bin/ : `sudo mkdir -p /opt/cni/bin`
 - Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
 - Vérifier la conf CNI : `sudo ls -al /etc/cni/net.d/` - Si pas de fichier de conf exécuter la commande :
+
   ```bash
   cat << EOF | tee /etc/cni/net.d/10-containerd-net.conflist
   {
@@ -132,6 +135,18 @@ conf_dir = "/etc/cni/net.d"
   EOF
   ```
 
+  puis rajouter le fichier de configuration de l'interface loopback nécessaire :
+
+  ```bash
+  cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  {
+    "cniVersion": "0.4.0",
+    "name": "lo",
+    "type": "loopback"
+  }
+  EOF
+  ```
+
 #### Vérification post-install
 
 La CLI Containerd devrait fonctionner pour vérifier taper la commande : `ctr -v`
@@ -147,4 +162,4 @@ EOF
 sudo apt-get update && sudo apt upgrade -y
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
-```
+````
