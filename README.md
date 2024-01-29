@@ -163,3 +163,8 @@ sudo apt-get update && sudo apt upgrade -y
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ````
+
+### Remove node
+```bash
+kubeadm reset && iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+```
