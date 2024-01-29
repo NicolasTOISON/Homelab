@@ -115,20 +115,19 @@ conf_dir = "/etc/cni/net.d"
      "ipam": {
        "type": "host-local",
        "ranges": [
-         [{
-           "subnet": "10.1.1.0/24"
-         }]
-       ],
-       "routes": [
-         { "dst": "0.0.0.0/0" },
-         { "dst": "::/0" }
-       ]
+          [{
+            "subnet": "10.88.0.0/16"
+          }]
+        ],
+        "routes": [
+          { "dst": "0.0.0.0/0" },
+          { "dst": "::/0" }
+        ]
      }
    },
    {
      "type": "portmap",
-     "capabilities": {"portMappings": true},
-     "externalSetMarkChain": "KUBE-MARK-MASQ"
+     "capabilities": {"portMappings": true}
    }
   ]
   }
@@ -140,7 +139,7 @@ conf_dir = "/etc/cni/net.d"
   ```bash
   cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
   {
-    "cniVersion": "0.4.0",
+    "cniVersion": "1.0.0",
     "name": "lo",
     "type": "loopback"
   }
@@ -167,4 +166,10 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ### Remove node
 ```bash
 kubeadm reset && rm -r $HOME/.kube && iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+```
+
+### CTR Clean up commands
+```bash
+ctr -n k8s.io c rm <containers_ids>
+ctr -n k8s.io i rm $(ctr -n k8s.io i ls -q | grep <your_filter>)
 ```
