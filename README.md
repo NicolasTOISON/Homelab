@@ -129,8 +129,9 @@ conf_dir = "/etc/cni/net.d"
   }
   EOF
   ```
+*Inspired by : https://github.com/containerd/containerd/blob/main/script/setup/install-cni & https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors/#an-example-containerd-configuration-file*
 
-  puis rajouter le fichier de configuration de l'interface loopback nécessaire :
+  ~~puis rajouter le fichier de configuration de l'interface loopback nécessaire :
 
   ```bash
   cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
@@ -141,6 +142,7 @@ conf_dir = "/etc/cni/net.d"
   }
   EOF
   ```
+~~
 
 #### Vérification post-install
 
