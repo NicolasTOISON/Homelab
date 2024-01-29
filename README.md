@@ -163,7 +163,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 ### Run kubeadm to bootstrap cluster
 ``` bash
-kubeadm init
+kubeadm init --pod-network-cidr=10.1.1.0/24 --apiserver-advertise-address 10.1.1.1
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
 
