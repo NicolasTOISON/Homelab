@@ -124,10 +124,6 @@ conf_dir = "/etc/cni/net.d"
           { "dst": "::/0" }
         ]
      }
-   },
-   {
-     "type": "portmap",
-     "capabilities": {"portMappings": true}
    }
   ]
   }
