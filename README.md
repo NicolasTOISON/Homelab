@@ -166,5 +166,5 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 ### Remove node
 ```bash
-kubeadm reset && iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+kubeadm reset && rm -r $HOME/.kube && iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 ```
