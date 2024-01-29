@@ -116,7 +116,7 @@ conf_dir = "/etc/cni/net.d"
        "type": "host-local",
        "ranges": [
           [{
-            "subnet": "10.88.0.0/16"
+            "subnet": "10.1.1.0/24"
           }]
         ],
         "routes": [
