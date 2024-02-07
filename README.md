@@ -187,3 +187,7 @@ ctr -n k8s.io i rm $(ctr -n k8s.io i ls -q | grep etcd) && ctr -n k8s.io i rm $(
 https://docs.cilium.io/en/stable/operations/system_requirements/
 
 https://docs.cilium.io/en/stable/installation/k8s-install-kubeadm/
+
+### Appendix
+
+https://v1-28.docs.kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
