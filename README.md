@@ -191,3 +191,6 @@ https://docs.cilium.io/en/stable/installation/k8s-install-kubeadm/
 ### Appendix
 
 https://v1-28.docs.kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
+
+#### CNI Configuration Tool
+https://github.com/containernetworking/cni/tree/main/cnitool
