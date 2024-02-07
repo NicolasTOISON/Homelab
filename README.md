@@ -168,7 +168,19 @@ All pods must be at running status except coredns pods (i.e https://kubernetes.i
 
 ### Install Flannel
 ```bash
-kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+wget https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+```
+Add following conf to DaemonSet in kube-flannel.yml previously downloaded
+``` bash
+- name: KUBERNETES_SERVICE_HOST
+  value: '<IP Master/DNS Master>' #ip address or dns of the host where kube-apiservice is running
+- name: KUBERNETES_SERVICE_PORT
+  value: '6443'
+```
+
+Apply flannel conf
+``` bash
+kubectl apply -f kube-flannel.yml
 ```
 
 ### Remove node
