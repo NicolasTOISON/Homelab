@@ -103,10 +103,10 @@ conf_dir = "/etc/cni/net.d"
 - Vérifier la conf CNI : `sudo ls -al /etc/cni/net.d/` - Si pas de fichier de conf exécuter la commande :
 
   ```bash
-  cat << EOF | tee /etc/cni/net.d/10-custom-network.conf
+  cat << EOF | tee /etc/cni/net.d/10-k8s-custom-network.conf
   {
   "cniVersion": "1.0.0",
-  "name": "custom-network",
+  "name": "k8s-custom-network",
   "plugins": [
     {
       "type": "bridge",
@@ -118,7 +118,7 @@ conf_dir = "/etc/cni/net.d"
         "type": "host-local",
         "ranges": [
           [{
-            "subnet": "10.1.1.0/24"
+            "subnet": "10.244.0.0/16"
           }]
         ],
         "routes": [
