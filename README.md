@@ -170,13 +170,35 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ````
 
-### Run kubeadm to bootstrap cluster
+### Run kubeadm to bootstrap cluster (cilium option)
+``` bash
+kubeadm init --pod-network-cidr=10.1.1.0/24 --skip-phases=addon/kube-proxy
+```
+All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
+
+#### Download Cilium binaries
+``` bash
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+```
+
+#### Install Cilium binaries
+``` bash
+cilium install --version 1.15.2
+``` bash
+
+### Run kubeadm to bootstrap cluster (flannel option)
 ``` bash
 kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
 
-### Install Flannel
+#### Deownload Flannel YAML configuration file
 ```bash
 wget https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
@@ -187,7 +209,7 @@ Add following conf to DaemonSet in kube-flannel.yml previously downloaded
 - name: KUBERNETES_SERVICE_PORT
   value: '6443'
 ```
-
+#### Install Flannel
 Apply flannel conf
 ``` bash
 kubectl apply -f kube-flannel.yml
