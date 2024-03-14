@@ -158,3 +158,13 @@ https://v1-28.docs.kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-
 
 #### CNI Configuration Tool
 https://github.com/containernetworking/cni/tree/main/cnitool
+
+#### Controlling your cluster from machines other than the control-plane node
+```bash
+kubectl --kubeconfig ./admin.conf get nodes
+```
+
+#### Proxying API Server to localhost
+```bash
+kubectl --kubeconfig ./admin.conf proxy
+```
