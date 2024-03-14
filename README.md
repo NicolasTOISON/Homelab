@@ -73,8 +73,8 @@ Doc containerd : https://github.com/containerd/containerd/blob/main/docs/getting
 Dépôt des release contaienrd : https://containerd.io/downloads/
 
 - Télécharger containerd
-  `wget https://github.com/containerd/containerd/releases/download/v1.7.11/containerd-1.7.11-linux-arm64.tar.gz`
-- Dézipper l'archive dans /usr/local : `sudo tar Cxzvf /usr/local containerd-1.7.11-linux-arm64.tar.gz`
+  `wget https://github.com/containerd/containerd/releases/download/v1.7.14/containerd-1.7.14-linux-arm64.tar.gz`
+- Dézipper l'archive dans /usr/local : `sudo tar Cxzvf /usr/local containerd-1.7.14-linux-arm64.tar.gz`
 - Téleçharger l'unit systèmed de containerd : `wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service`
 - Déplacer le fichier précédemment télécharger vers la destination /usr/local/lib/systemd/system : `sudo mv containerd.service /usr/local/lib/systemd/system/`
 - Vérification que la copie a bien eu lieu : `sudo ls -al /usr/local/lib/systemd/system | grep containerd`
@@ -86,7 +86,7 @@ Dépôt des release contaienrd : https://containerd.io/downloads/
 
 Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 
-- Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.11/runc.arm64`
+- Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.arm64`
 - Installer runc : `sudo install -m 755 runc.arm64 /usr/local/sbin/runc`
 
 #### Installer le plugin CNI
@@ -97,9 +97,9 @@ bin_dir = "/opt/cni/bin"
 
 conf_dir = "/etc/cni/net.d"
 
-- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
+- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.1/cni-plugins-linux-arm64-v1.4.1.tgz`
 - Créer le répertoire /cni/bin/ : `sudo mkdir -p /opt/cni/bin`
-- Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
+- Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.1.tgz`
 - Vérifier la conf CNI : `sudo ls -al /etc/cni/net.d/` - Si pas de fichier de conf exécuter la commande :
 
   ```bash
@@ -107,27 +107,8 @@ conf_dir = "/etc/cni/net.d"
   {
   "cniVersion": "1.0.0",
   "name": "containerd-net",
-  "plugins": [
-   {
-     "type": "bridge",
-     "bridge": "cni0",
-     "isGateway": true,
-     "ipMasq": true,
-     "promiscMode": true,
-     "ipam": {
-       "type": "host-local",
-       "ranges": [
-          [{
-            "subnet": "10.1.1.0/24"
-          }]
-        ],
-        "routes": [
-          { "dst": "0.0.0.0/0" },
-          { "dst": "::/0" }
-        ]
-     }
-   }
-  ]
+  "type": "bridge",
+  "bridge": "cni0",
   }
   EOF
   ```
