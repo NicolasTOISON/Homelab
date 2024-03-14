@@ -168,3 +168,11 @@ kubectl --kubeconfig ./admin.conf get nodes
 ```bash
 kubectl --kubeconfig ./admin.conf proxy
 ```
+####
+| Package name |	Description |
+|---|---|
+| kubeadm |	Installs the /usr/bin/kubeadm CLI tool and the kubelet drop-in file for the kubelet.|
+| kubelet |	Installs the /usr/bin/kubelet binary.|
+| kubectl |	Installs the /usr/bin/kubectl binary.|
+| cri-tools |	Installs the /usr/bin/crictl binary from the cri-tools git repository.|
+| kubernetes-cni |Installs the /opt/cni/bin binaries from the plugins git repository.|
