@@ -33,7 +33,7 @@
 
 - Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande `sudo vi /boot/firmware/cmdline.txt`
 - Si nécessaire, ajouter les éléments suivants à la liste existante :`cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1` grâce à la commande sed suivantes
-- sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt
+- `sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt`
 - Rebooter le système `sudo systemctl reboot`
 
 ### UPDATE IPTABLES CONFIG
