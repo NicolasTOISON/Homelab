@@ -12,9 +12,9 @@
 
 ### UPDATE EEPROM (optional)
 
-- Launch RPI Software configuration tool `sudo raspi-config`
+- Launch RPI Software configuration tool `raspi-config`
 - Selectionner l'option 6 nommé Advanced Options puis l'option A5 nommé bootloader version puis sélectionner l'option E1 - latest.
-- Rebooté le système `sudo systemctl reboot`
+- Rebooté le système `systemctl reboot`
 
 ### Update Packages
 `apt update && apt upgrade -y && rpi-update`
@@ -41,7 +41,7 @@
 
 - Rajouter overlay et br_netfilter à la conf k8s :
   ```bash
-  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+  cat <<EOF | tee /etc/modules-load.d/k8s.conf
   overlay
   br_netfilter
   EOF
@@ -55,7 +55,7 @@
 - Configurer iptables afin qu'il voit correctement le traffic ponté
 
   ```bash
-  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+  cat <<EOF | tee /etc/sysctl.d/k8s.conf
   net.bridge.bridge-nf-call-iptables  = 1
   net.bridge.bridge-nf-call-ip6tables = 1
   net.ipv4.ip_forward                 = 1
@@ -74,20 +74,20 @@ Dépôt des release contaienrd : https://containerd.io/downloads/
 
 - Télécharger containerd
   `wget https://github.com/containerd/containerd/releases/download/v1.7.14/containerd-1.7.14-linux-arm64.tar.gz`
-- Dézipper l'archive dans /usr/local : `sudo tar Cxzvf /usr/local containerd-1.7.14-linux-arm64.tar.gz`
+- Dézipper l'archive dans /usr/local : `tar Cxzvf /usr/local containerd-1.7.14-linux-arm64.tar.gz`
 - Téleçharger l'unit systèmed de containerd : `wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service`
-- Déplacer le fichier précédemment télécharger vers la destination /usr/local/lib/systemd/system : `sudo mv containerd.service /usr/local/lib/systemd/system/`
-- Vérification que la copie a bien eu lieu : `sudo ls -al /usr/local/lib/systemd/system | grep containerd`
-- Configurer containerd par défaut à l'aide de la commande suivante : `sudo containerd config default > /etc/containerd/config.toml`
-- Recharger le daemon systemd : `sudo systemctl daemon-reload`
-- Activer l'unit systemd de containerd : `sudo systemctl enable --now containerd`
+- Déplacer le fichier précédemment télécharger vers la destination /usr/local/lib/systemd/system : `mv containerd.service /usr/local/lib/systemd/system/`
+- Vérification que la copie a bien eu lieu : `ls -al /usr/local/lib/systemd/system | grep containerd`
+- Configurer containerd par défaut à l'aide de la commande suivante : `containerd config default > /etc/containerd/config.toml`
+- Recharger le daemon systemd : `systemctl daemon-reload`
+- Activer l'unit systemd de containerd : `systemctl enable --now containerd`
 
 #### Installer runc
 
 Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 
 - Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.arm64`
-- Installer runc : `sudo install -m 755 runc.arm64 /usr/local/sbin/runc`
+- Installer runc : `install -m 755 runc.arm64 /usr/local/sbin/runc`
 
 #### Installer le plugin CNI
 
@@ -98,9 +98,9 @@ bin_dir = "/opt/cni/bin"
 conf_dir = "/etc/cni/net.d"
 
 - Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.1/cni-plugins-linux-arm64-v1.4.1.tgz`
-- Créer le répertoire /cni/bin/ : `sudo mkdir -p /opt/cni/bin`
-- Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.1.tgz`
-- Vérifier la conf CNI : `sudo ls -al /etc/cni/net.d/` - Si pas de fichier de conf exécuter la commande :
+- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
+- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.1.tgz`
+- Vérifier la conf CNI : `ls -al /etc/cni/net.d/` - Si pas de fichier de conf exécuter la commande :
 
   ```bash
   cat << EOF | tee /etc/cni/net.d/10-k8s-custom-network.conf
@@ -140,7 +140,7 @@ conf_dir = "/etc/cni/net.d"
   ~~puis rajouter le fichier de configuration de l'interface loopback nécessaire :~~
 
   ```bash
-  cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  cat <<EOF | tee /etc/cni/net.d/99-loopback.conf
   {
     "cniVersion": "1.0.0",
     "name": "lo",
@@ -157,13 +157,13 @@ La CLI Containerd devrait fonctionner pour vérifier taper la commande : `ctr -v
 ### INSTALL KUBEADM, KUBECTL and KUBELET
 
 ```bash
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 # This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update && sudo apt upgrade -y
-sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+apt-get update && apt upgrade -y
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
 ````
 
 ### Run kubeadm to bootstrap cluster (cilium option)
@@ -179,7 +179,7 @@ CLI_ARCH=amd64
 if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
 curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
-sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
 rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 ```
 
