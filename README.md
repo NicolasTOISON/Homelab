@@ -114,6 +114,17 @@ Add following conf to DaemonSet in kube-flannel.yml previously downloaded
 - name: KUBERNETES_SERVICE_PORT
   value: '6443'
 ```
+#### Add loopback configuration in cni config directory
+``` bash
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  {
+    "cniVersion": "1.0.0",
+    "name": "lo",
+    "type": "loopback"
+  }
+EOF
+```
+
 #### Install Flannel
 Apply flannel conf
 ``` bash
