@@ -27,7 +27,7 @@
   br_netfilter
   EOF
   ```
-- Taper la commande `modprobe overlay &&modprobe br_netfilter`
+- Taper la commande `modprobe overlay && modprobe br_netfilter`
 - Pour vérifier que la commande précédente a bien été exécutée, taper les commandes suivantes successivement :
   - `lsmod | grep overlay`
   - `lsmod | grep br_netfilter`
