@@ -1,4 +1,5 @@
 # kubernetes-on-rpi cookbook
+Inspired by https://v1-28.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
 ## PREPARE RPI HOSTS
 
@@ -102,6 +103,10 @@ apt-mark hold kubelet kubeadm kubectl
 kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
+
+
+### Install CNI Plugin
+https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
 
 #### Deownload Flannel YAML configuration file
 ```bash
