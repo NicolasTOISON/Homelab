@@ -107,11 +107,38 @@ conf_dir = "/etc/cni/net.d"
   {
   "cniVersion": "1.0.0",
   "name": "containerd-net",
-  "type": "bridge",
-  "bridge": "cni0",
+  "plugins": [
+    {
+      "type": "bridge",
+      "bridge": "cni0",
+      "isGateway": true,
+      "ipMasq": true,
+      "promiscMode": true,
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{
+            "subnet": "10.88.0.0/16"
+          }],
+          [{
+            "subnet": "2001:4860:4860::/64"
+          }]
+        ],
+        "routes": [
+          { "dst": "0.0.0.0/0" },
+          { "dst": "::/0" }
+        ]
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {"portMappings": true}
+    }
+  ]
   }
   EOF
   ```
+  
 *Inspired by : https://github.com/containerd/containerd/blob/main/script/setup/install-cni & https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors/#an-example-containerd-configuration-file*
 
   ~~puis rajouter le fichier de configuration de l'interface loopback nécessaire :~~
