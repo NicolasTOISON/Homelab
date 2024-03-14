@@ -4,37 +4,38 @@
 
 ### Install RPI OS using RPI PI Imager
 
-### Update Packages
-
-`sudo apt update && sudo apt upgrade -y && rpi-update`
+### Get Root Privileges
+`sudo su`
 
 ### READ EEPROM CONFIGURATION
+`rpi-eeprom-update`
 
-`sudo rpi-eeprom-update`
-
-### UPDATE EEPROM
+### UPDATE EEPROM (optional)
 
 - Launch RPI Software configuration tool `sudo raspi-config`
 - Selectionner l'option 6 nommé Advanced Options puis l'option A5 nommé bootloader version puis sélectionner l'option E1 - latest.
 - Rebooté le système `sudo systemctl reboot`
 
-### DISABLE SWAP MEMORY
+### Update Packages
+`apt update && apt upgrade -y && rpi-update`
+
+### DISABLE SWAP MEMORY (if necessary)
 
 - Afin de vérifier que la mémoire swap est utilisé taper la commande :
-  `sudo swapon --show`
+  `swapon --show`
 - Si la sortie de la commande précédente passer à l'étape suivante sinon il faut modifier le paramétrage. Pour cela exécuter les commandes suivantes :
-  - `sudo dphys-swapfile swapoff`
-  - `sudo dphys-swapfile uninstall`
-  - `sudo update-rc.d dphys-swapfile remove`
-  - `sudo apt purge dphys-swapfile -y && sudo apt autoremove`
-  - `sudo sysctl -w vm.swappiness=0`
+  - `dphys-swapfile swapoff`
+  - `dphys-swapfile uninstall`
+  - `update-rc.d dphys-swapfile remove`
+  - `apt purge dphys-swapfile -y && apt autoremove`
+  - `sysctl -w vm.swappiness=0`
 
 ### UPDATE CGROUP MEMORY DRIVER in firmware booting files
 
-- Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande `sudo vi /boot/firmware/cmdline.txt`
+- Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande `cat /boot/firmware/cmdline.txt`
 - Si nécessaire, ajouter les éléments suivants à la liste existante :`cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1` grâce à la commande sed suivantes
 - `sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1/' /boot/firmware/cmdline.txt`
-- Rebooter le système `sudo systemctl reboot`
+- Rebooter le système `systemctl reboot`
 
 ### UPDATE IPTABLES CONFIG
 
@@ -45,7 +46,7 @@
   br_netfilter
   EOF
   ```
-- taper la commande `sudo modprobe overlay && sudo modprobe br_netfilter`
+- taper la commande `modprobe overlay &&modprobe br_netfilter`
 - Pour vérifier que la commande précédente a bien été exécutée, taper les commandes suivantes successivement :
 
   - `lsmod | grep overlay`
@@ -54,14 +55,14 @@
 - Configurer iptables afin qu'il voit correctement le traffic ponté
 
   ```bash
-  sudo cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
   net.bridge.bridge-nf-call-iptables  = 1
   net.bridge.bridge-nf-call-ip6tables = 1
   net.ipv4.ip_forward                 = 1
   EOF
   ```
 
-- Vérifier que les paramètres appliqués sont bien pris en compte `sudo sysctl --system`
+- Vérifier que les paramètres appliqués sont bien pris en compte `sysctl --system`
 
 ### INSTALL CRI
 
