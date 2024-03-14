@@ -190,7 +190,7 @@ rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 #### Install Cilium binaries
 ``` bash
 cilium install --version 1.15.2
-``` bash
+```
 
 ### Run kubeadm to bootstrap cluster (flannel option)
 ``` bash
