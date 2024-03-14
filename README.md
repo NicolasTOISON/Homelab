@@ -119,6 +119,11 @@ Apply flannel conf
 ``` bash
 kubectl apply -f kube-flannel.yml
 ```
+### Add node
+```bash
+kubeadm join 10.0.0.10:6443 --token s3bz5b.1l7mxw26bp8e2wxt \
+        --discovery-token-ca-cert-hash sha256:98e674d6839d5cb6c45ba508e2c9667731bf777f5eeec4a425523e14f1a0bf82 --apiserver-advertise-address=10.0.0.10
+```
 
 ### Remove node
 ```bash
