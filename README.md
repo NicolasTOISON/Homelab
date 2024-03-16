@@ -14,6 +14,11 @@ Inspired by https://v1-28.docs.kubernetes.io/docs/setup/production-environment/t
 ### Update Packages
 `apt update && apt upgrade -y`
 
+### Install packages
+```bash
+apt-get -y install socat conntrack ipset linux-modules-extra-raspi
+```
+
 ### UPDATE CGROUP MEMORY DRIVER in firmware booting files
 - Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande `cat /boot/firmware/cmdline.txt`
 - Si nécessaire, ajouter les éléments suivants à la liste existante :`cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1` grâce à la commande sed suivantes
@@ -140,6 +145,8 @@ apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
 ````
 
+/var/lib/kubelet/config.yaml
+
 ### Run kubeadm to bootstrap cluster (flannel option)
 ``` bash
 kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10 --control-plane-endpoint=10.0.0.10
@@ -217,3 +224,13 @@ Logs de tous les pods core-dns
 ```bash
 for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name);  do kubectl logs --namespace=kube-system $p; done
 ```
+
+#### Troubleshooting
+https://v1-28.docs.kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
+
+```bash
+kubectl get svc --namespace=kube-system
+
+kubectl get endpoints kube-dns --namespace=kube-system -o wide
+```
+https://github.com/coredns/coredns/issues/5778
