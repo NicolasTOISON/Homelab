@@ -93,6 +93,17 @@ conf_dir = "/etc/cni/net.d"
 - Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
 - Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
 
+#### Add loopback configuration in cni config directory
+``` bash
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  {
+    "cniVersion": "1.0.0",
+    "name": "lo",
+    "type": "loopback"
+  }
+EOF
+```
+
 #### Vérification post-install
 
 La CLI Containerd devrait fonctionner pour vérifier taper la commande : `ctr -v`
