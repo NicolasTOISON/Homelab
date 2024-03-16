@@ -117,40 +117,6 @@ conf_dir = "/etc/cni/net.d"
 - Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
 - Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
 
-#### Add containerd cni configuration 
-```bash
-cat << EOF | tee /etc/cni/net.d//10-containerd-net.conflist
-{
-  "cniVersion": "1.0.0",
-  "name": "containerd-net",
-  "plugins": [
-    {
-      "type": "bridge",
-      "bridge": "cni0",
-      "isGateway": true,
-      "ipMasq": true,
-      "promiscMode": true,
-      "ipam": {
-        "type": "host-local",
-        "ranges": [
-          [{
-            "subnet": "10.0.0.10/16"
-          }]        
-	],
-        "routes": [
-          { "dst": "0.0.0.0/0" }
-        ]
-      }
-    },
-    {
-      "type": "portmap",
-      "capabilities": {"portMappings": true}
-    }
-  ]
-}
-EOF
-```
-
 #### Add loopback configuration in cni config directory
 ``` bash
 cat <<EOF | tee /etc/cni/net.d/99-loopback.conf
