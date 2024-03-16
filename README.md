@@ -47,6 +47,49 @@ Inspired by https://v1-28.docs.kubernetes.io/docs/setup/production-environment/t
   ```
 
 - Vérifier que les paramètres appliqués sont bien pris en compte `sysctl --system`
+### Install CNI Plugin
+https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
+
+bin_dir = "/opt/cni/bin"
+conf_dir = "/etc/cni/net.d"
+
+- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.1/cni-plugins-linux-arm64-v1.4.1.tgz`
+- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
+- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.1.tgz`
+
+#### Add bridge configuration
+```bash
+cat <<EOF | tee /etc/cni/net.d/10-bridge.conf
+{
+    "cniVersion": "0.4.0",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "10.244.0.0/16"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+```
+
+#### Add loopback configuration in cni config directory
+``` bash
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  {
+    "cniVersion": "0.4.0",
+    "name": "lo",
+    "type": "loopback"
+  }
+EOF
+```
 
 ### INSTALL CRI
 
@@ -80,29 +123,6 @@ Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 
 - Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.arm64`
 - Installer runc : `install -m 755 runc.arm64 /usr/local/sbin/runc`
-
-#### Install CNI Plugin
-https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
-
-bin_dir = "/opt/cni/bin"
-conf_dir = "/etc/cni/net.d"
-
-- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
-- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
-- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
-
-#### Add loopback configuration in cni config directory
-``` bash
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
-  {
-    "cniVersion": "1.0.0",
-    "name": "lo",
-    "type": "loopback"
-  }
-EOF
-```
 
 #### Vérification post-install
 
