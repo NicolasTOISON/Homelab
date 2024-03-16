@@ -114,8 +114,8 @@ bin_dir = "/opt/cni/bin"
 conf_dir = "/etc/cni/net.d"
 
 - Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
-- Créer le répertoire /cni/bin/ : `sudo mkdir -p /opt/cni/bin`
-- Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
+- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
+- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
 
 #### Add containerd cni configuration 
 ```bash
@@ -153,7 +153,7 @@ EOF
 
 #### Add loopback configuration in cni config directory
 ``` bash
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+cat <<EOF | tee /etc/cni/net.d/99-loopback.conf
   {
     "cniVersion": "1.0.0",
     "name": "lo",
