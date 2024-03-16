@@ -37,7 +37,6 @@ Inspired by https://v1-28.docs.kubernetes.io/docs/setup/production-environment/t
   ```bash
   cat <<EOF | tee /etc/sysctl.conf
   net.bridge.bridge-nf-call-iptables  = 1
-  net.bridge.bridge-nf-call-ip6tables = 1
   net.ipv4.ip_forward                 = 1
   EOF
   ```
@@ -82,6 +81,18 @@ Dépôt des releases runc : https://github.com/opencontainers/runc/releases
 - Télécharger runc : `wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.arm64`
 - Installer runc : `install -m 755 runc.arm64 /usr/local/sbin/runc`
 
+#### Install CNI Plugin
+https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
+
+bin_dir = "/opt/cni/bin"
+conf_dir = "/etc/cni/net.d"
+
+- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
+- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
+- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
+
 #### Vérification post-install
 
 La CLI Containerd devrait fonctionner pour vérifier taper la commande : `ctr -v`
@@ -98,37 +109,13 @@ apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
 ````
 
-### Run kubeadm to bootstrap cluster (cilium option)
+### Run kubeadm to bootstrap cluster (flannel option)
 ``` bash
 kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10 --control-plane-endpoint=10.0.0.10
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
 
-
-### Install CNI Plugin
-https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
-
-bin_dir = "/opt/cni/bin"
-conf_dir = "/etc/cni/net.d"
-
-- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
-- Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
-- Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
-
-#### Add loopback configuration in cni config directory
-``` bash
-cat <<EOF | tee /etc/cni/net.d/99-loopback.conf
-  {
-    "cniVersion": "1.0.0",
-    "name": "lo",
-    "type": "loopback"
-  }
-EOF
-```
-
-#### Deownload Flannel YAML configuration file
+#### Download Flannel YAML configuration file
 ```bash
 wget https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
