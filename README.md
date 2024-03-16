@@ -133,6 +133,11 @@ Apply flannel conf
 kubectl apply -f kube-flannel.yml
 ```
 
+#### Activation addon kube-proxy
+```bash
+kubeadm init phase addon kube-proxy
+```
+
 ### Add node
 ```bash
 kubeadm join 10.0.0.10:6443 --token s3bz5b.1l7mxw26bp8e2wxt \
