@@ -100,13 +100,67 @@ apt-mark hold kubelet kubeadm kubectl
 
 ### Run kubeadm to bootstrap cluster (cilium option)
 ``` bash
-kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10
+kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10 --control-plane-endpoint=10.0.0.10
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
 
 
 ### Install CNI Plugin
 https://v1-28.docs.kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Dépôt des release de CNI Plugins : https://github.com/containernetworking/plugins/releases
+
+bin_dir = "/opt/cni/bin"
+conf_dir = "/etc/cni/net.d"
+
+- Téleçharger le plugin CNI : `wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-arm64-v1.4.0.tgz`
+- Créer le répertoire /cni/bin/ : `sudo mkdir -p /opt/cni/bin`
+- Dézipper le fichier dans le répertoire précédemment créé : `sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.0.tgz`
+
+#### Add containerd cni configuration 
+```bash
+cat << EOF | tee /etc/cni/net.d//10-containerd-net.conflist
+{
+  "cniVersion": "1.0.0",
+  "name": "containerd-net",
+  "plugins": [
+    {
+      "type": "bridge",
+      "bridge": "cni0",
+      "isGateway": true,
+      "ipMasq": true,
+      "promiscMode": true,
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{
+            "subnet": "10.0.0.10/16"
+          }]        
+	],
+        "routes": [
+          { "dst": "0.0.0.0/0" }
+        ]
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {"portMappings": true}
+    }
+  ]
+}
+EOF
+```
+
+#### Add loopback configuration in cni config directory
+``` bash
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+  {
+    "cniVersion": "1.0.0",
+    "name": "lo",
+    "type": "loopback"
+  }
+EOF
+```
 
 #### Deownload Flannel YAML configuration file
 ```bash
@@ -119,22 +173,13 @@ Add following conf to DaemonSet in kube-flannel.yml previously downloaded
 - name: KUBERNETES_SERVICE_PORT
   value: '6443'
 ```
-#### Add loopback configuration in cni config directory
-``` bash
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
-  {
-    "cniVersion": "1.0.0",
-    "name": "lo",
-    "type": "loopback"
-  }
-EOF
-```
 
 #### Install Flannel
 Apply flannel conf
 ``` bash
 kubectl apply -f kube-flannel.yml
 ```
+
 ### Add node
 ```bash
 kubeadm join 10.0.0.10:6443 --token s3bz5b.1l7mxw26bp8e2wxt \
@@ -176,3 +221,7 @@ kubectl --kubeconfig ./admin.conf proxy
 | kubectl |	Installs the /usr/bin/kubectl binary.|
 | cri-tools |	Installs the /usr/bin/crictl binary from the cri-tools git repository.|
 | kubernetes-cni |Installs the /opt/cni/bin binaries from the plugins git repository.|
+
+#### Useful commands
+Logs de tous les pods core-dns
+for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name);  do kubectl logs --namespace=kube-system $p; done
