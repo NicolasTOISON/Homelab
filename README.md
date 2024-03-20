@@ -226,6 +226,10 @@ for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name)
 ```
 
 #### Troubleshooting
+##### CNI TOOL to debug CNI configuration
+https://www.cni.dev/docs/cnitool/
+
+##### DNS debugging resolution
 https://v1-28.docs.kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
 
 ```bash
