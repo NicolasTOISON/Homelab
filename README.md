@@ -139,6 +139,11 @@ conf_dir = "/etc/cni/net.d"
 - Créer le répertoire /cni/bin/ : `mkdir -p /opt/cni/bin`
 - Dézipper le fichier dans le répertoire précédemment créé : `tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.4.1.tgz`
 
+#### Troubleshooting CNI 
+```bash
+cat /tmp/cni-inspect.log
+```
+
 #### Activation addon kube-proxy
 ```bash
 kubeadm init phase addon kube-proxy
