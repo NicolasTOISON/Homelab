@@ -96,6 +96,8 @@ La CLI Containerd devrait fonctionner pour vérifier taper la commande : `ctr -v
 
 ### INSTALL KUBEADM, KUBECTL and KUBELET
 
+Source : https://kubernetes.io/blog/2023/08/15/pkgs-k8s-io-introduction/
+
 ```bash
 apt-get install -y apt-transport-https ca-certificates curl gpg
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
