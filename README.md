@@ -71,8 +71,8 @@ Doc containerd : https://github.com/containerd/containerd/blob/main/docs/getting
 Dépôt des release contaienrd : https://containerd.io/downloads/
 
 - Télécharger containerd
-  `wget https://github.com/containerd/containerd/releases/download/v1.7.14/containerd-1.7.14-linux-arm64.tar.gz`
-- Dézipper l'archive dans /usr/local : `tar Cxzvf /usr/local containerd-1.7.14-linux-arm64.tar.gz`
+  `wget https://github.com/containerd/containerd/releases/download/v1.7.17/containerd-1.7.17-linux-arm64.tar.gz`
+- Dézipper l'archive dans /usr/local : `tar Cxzvf /usr/local containerd-1.7.17-linux-arm64.tar.gz`
 - Téleçharger l'unit systèmed de containerd : `wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service`
 - Créer le répertoire /systemd/system/
   ```bash
