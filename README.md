@@ -36,14 +36,8 @@ systemctl reboot
 ```
 
 ### UPDATE IPTABLES CONFIG
-- Rajouter overlay et br_netfilter à la conf k8s :
-  ```bash
-  cat <<EOF | tee /etc/modules-load.d/local.conf
-  overlay
-  br_netfilter
-  EOF
-  ```
 - Taper la commande `modprobe overlay && modprobe br_netfilter`
+
 - Pour vérifier que la commande précédente a bien été exécutée, taper les commandes suivantes successivement :
   - `lsmod | grep overlay`
   - `lsmod | grep br_netfilter`
@@ -62,6 +56,7 @@ systemctl reboot
   ```
 
 - Vérifier que les paramètres appliqués sont bien pris en compte `sysctl --system`
+- 
 ### INSTALL CRI
 
 Doc containerd : https://github.com/containerd/containerd/blob/main/docs/getting-started.md
