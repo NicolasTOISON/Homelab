@@ -20,10 +20,20 @@ apt-get -y install socat conntrack ipset linux-modules-extra-raspi
 ```
 
 ### UPDATE CGROUP MEMORY DRIVER in firmware booting files
-- Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande `cat /boot/firmware/cmdline.txt`
-- Si nécessaire, ajouter les éléments suivants à la liste existante :`cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1` grâce à la commande sed suivantes
-- `sed -i '$ s/$/ logo.nologo systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all cgroup_enable=cpu cgroup_enable=cpuset cgroup_cpu=1 cgroup_cpuset=1 cgroup_enable=memory cgroup_memory=1 loglevel=3 vt.global_cursor_default=0/' /boot/firmware/cmdline.txt`
-- Rebooter le système `systemctl reboot`
+#### Lire le contenu du fichier /boot/firmware/cmdline.txt à l'aide de la commmande 
+```bash 
+cat /boot/firmware/cmdline.txt
+```
+
+#### Si nécessaire, ajouter les éléments suivants à la liste existante grâce à la commande sed suivantes
+```bash 
+sed -i '$ s/$/ logo.nologo systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all cgroup_enable=cpu cgroup_enable=cpuset cgroup_cpu=1 cgroup_cpuset=1 cgroup_enable=memory cgroup_memory=1 loglevel=3 vt.global_cursor_default=0/' /boot/firmware/cmdline.txt
+```
+
+#### Rebooter le système 
+```bash
+systemctl reboot
+```
 
 ### UPDATE IPTABLES CONFIG
 - Rajouter overlay et br_netfilter à la conf k8s :
