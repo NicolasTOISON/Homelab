@@ -16,7 +16,7 @@ Inspired by https://v1-28.docs.kubernetes.io/docs/setup/production-environment/t
 
 ### Install packages
 ```bash
-apt-get -y install socat conntrack ipset linux-modules-extra-raspi
+apt-get -y install socat conntrack ipset linux-modules-6.8.0-1004-raspi
 ```
 
 ### UPDATE CGROUP MEMORY DRIVER in firmware booting files
