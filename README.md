@@ -112,7 +112,7 @@ apt-mark hold kubelet kubeadm kubectl
 
 ### Run kubeadm to bootstrap cluster (flannel option)
 ``` bash
-kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10 --control-plane-endpoint=10.0.0.10
+kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy --apiserver-advertise-address=10.0.0.10 --control-plane-endpoint=10.0.0.10 --v=5
 ```
 All pods must be at running status except coredns pods (i.e https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/#coredns-is-stuck-in-the-pending-state)
 
