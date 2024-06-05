@@ -223,3 +223,11 @@ https://github.com/coredns/coredns/issues/5778
 | Name |	Path |
 |---|---|
 |Kubernetes Default Manifest Path|/etc/kubernetes/|
+
+##### CoreDNS blocked at Running but are not ready
+Add Iptables rule to allow connection on 10.0.0.0/8 IP
+
+```bash
+iptables -A INPUT -p tcp -m tcp --dport 6443 -s 10.0.0.0/8 -m state --state NEW -j ACCEPT
+```
+Source : https://forum.linuxfoundation.org/discussion/863356/coredns-pods-are-running-but-not-in-ready-state
