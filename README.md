@@ -218,3 +218,8 @@ kubectl get svc --namespace=kube-system
 kubectl get endpoints kube-dns --namespace=kube-system -o wide
 ```
 https://github.com/coredns/coredns/issues/5778
+
+##### Common repositories to know
+| Name |	Path |
+|---|---|
+|Kubernetes Default Manifest Path|/etc/kubernetes/|
