@@ -314,6 +314,11 @@ Logs de tous les pods core-dns
 for p in $(kubectl get pods --namespace=kube-system -l k8s-app=kube-dns -o name);  do kubectl logs --namespace=kube-system $p; done
 ```
 
+Add "worker" role to a newly joined worker node
+```bash
+kubectl label node <name_of_node> node-role.kubernetes.io/worker=worker
+```
+
 ## Common repositories to know
 
 | Name                             | Path             |
