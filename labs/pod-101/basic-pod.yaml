@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: basicpod
+spec:
+  containers:
+    - name: webcontainer
+      image: nginx
